@@ -42,14 +42,19 @@ check('tab title and url carried through when the API exposes them', () => {
       {
         window: {
           sessionId: 'w1',
-          tabs: [{ sessionId: 't1', title: 'Example', url: 'https://example.com/' }],
+          tabs: [{
+            sessionId: 't1',
+            title: 'Example',
+            url: 'https://example.com/',
+            favIconUrl: 'https://example.com/favicon.ico',
+          }],
         },
       },
     ],
   };
   const [session] = collectSessions(device);
   assert.deepEqual(session.tabs, [
-    { sessionId: 't1', title: 'Example', url: 'https://example.com/' },
+    { sessionId: 't1', title: 'Example', url: 'https://example.com/', favIconUrl: 'https://example.com/favicon.ico' },
   ]);
 });
 

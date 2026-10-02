@@ -37,7 +37,9 @@ body {
 .device ul { list-style: none; margin: 0; padding: 0 0 6px; }
 
 .tab {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
   text-align: left;
   border: 0;
@@ -47,6 +49,8 @@ body {
   padding: 5px 12px;
   cursor: pointer;
 }
+.tab-icon { flex: none; }
+.tab-content { min-width: 0; flex: 1; }
 .tab:hover { background: rgba(128, 128, 128, 0.15); }
 
 .tab-title {

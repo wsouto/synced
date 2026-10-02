@@ -35,6 +35,7 @@ function displayTab(tab) {
     sessionId: tab.sessionId,
     title: tab.title || null,
     url: tab.url || null,
+    ...(tab.favIconUrl ? { favIconUrl: tab.favIconUrl } : {}),
   };
 }
 
@@ -110,16 +111,36 @@ function renderTabRow(tab, index) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'tab';
+  if (tab.url) {
+    const icon = document.createElement('img');
+    icon.className = 'tab-icon';
+    icon.alt = '';
+    icon.width = 16;
+    icon.height = 16;
+    if (tab.favIconUrl) {
+      icon.src = tab.favIconUrl;
+    } else {
+      const iconUrl = new URL(chrome.runtime.getURL('/_favicon/'));
+      iconUrl.searchParams.set('pageUrl', tab.url);
+      iconUrl.searchParams.set('size', '16');
+      icon.src = iconUrl.href;
+    }
+    icon.addEventListener('error', () => icon.remove(), { once: true });
+    button.append(icon);
+  }
+  const content = document.createElement('span');
+  content.className = 'tab-content';
   const title = document.createElement('span');
   title.className = 'tab-title';
   title.textContent = tab.title ?? `Tab ${index}`;
-  button.append(title);
+  content.append(title);
   if (tab.url) {
     const url = document.createElement('span');
     url.className = 'tab-url';
     url.textContent = tab.url;
-    button.append(url);
+    content.append(url);
   }
+  button.append(content);
   button.addEventListener('click', () => restoreTab(tab.sessionId, button));
   li.append(button);
   return li;
